@@ -1,69 +1,134 @@
-import Image from "next/image";
+import { Header } from "@/components/global/Header";
+import { Footer } from "@/components/global/Footer";
+import { FullWidthBanner } from "@/components/ui/FullWidthBanner";
+import { HeroSection } from "@/components/home/HeroSection";
+import { EligibilitySection } from "@/components/home/EligibilitySection";
+import { BTechCreditTransferSection } from "@/components/home/BTechCreditTransferSection";
+import { BTechCoursesSection } from "@/components/home/BTechCoursesSection";
+import { CounsellorSection } from "@/components/home/CounsellorSection";
+import { UniversityReputationSection } from "@/components/home/UniversityReputationSection";
+import { AdmissionStepsSection } from "@/components/home/AdmissionStepsSection";
+import { ReusableEnquirySection } from "@/components/ui/ReusableEnquirySection";
+import { ArtsScienceSection } from "@/components/home/ArtsScienceSection";
+import { AwarenessVideosSection } from "@/components/home/AwarenessVideosSection";
+import { AffiliationSection } from "@/components/home/AffiliationSection";
+import { AccreditationSection } from "@/components/home/AccreditationSection";
+import { AttestationSection } from "@/components/home/AttestationSection";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { MoreDetailsSection } from "@/components/home/MoreDetailsSection";
+import { GallerySection } from "@/components/home/GallerySection";
+import { FAQSection } from "@/components/home/FAQSection";
+import { FinalContactSection } from "@/components/home/FinalContactSection";
+import { images } from "@/lib/data";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-white text-neutral-900 font-body">
+      <Header />
+
+      {/* 01. Hero & Introduction */}
+      <HeroSection />
+
+      {/* 02. Form 1: Check Eligibility */}
+      <EligibilitySection />
+
+      {/* 03. BANNER 1: B.Tech Full Width Image Banner */}
+      <FullWidthBanner
+        imageSrc="/service-banner/B.Tech Pathways_ Complete Your Degree.png"
+        alt="Complete Your B.Tech Journey"
+        buttonHref="#btech"
+      />
+
+      {/* 04. B.Tech Credit Transfer Details */}
+      <BTechCreditTransferSection />
+
+      {/* 05. B.Tech Engineering Disciplines */}
+      <BTechCoursesSection />
+
+      {/* 06. Form 2: Talk with Counsellor */}
+      <CounsellorSection />
+
+      {/* 07. University Reputation & Experience */}
+      <UniversityReputationSection />
+
+      {/* 08. Admission Steps & Process */}
+      <AdmissionStepsSection />
+
+      {/* 09. Form 3: Admission Enquiry */}
+      <ReusableEnquirySection
+        badgeText="Admissions"
+        badgeColor="#26A9E0"
+        title="Start your admission enquiry."
+        description="Tell us which course you are interested in and share your academic background. Our team can help you understand the next steps."
+        imageSrc='/admission/Friends Strolling Through Campus.png'
+        imageAlt="Students discussing education"
+        formTitle="Admission Enquiry"
+        formSubtitle="Tell us what you are looking for."
+        formVariant="green"
+        buttonText="SUBMIT"
+        sectionBg="bg-white"
+      />
+
+      {/* 10. BANNER 2: Arts & Science Full Width Image Banner */}
+      <FullWidthBanner
+        imageSrc="/service-banner/Academic Programs on Campus.png"
+        alt="Arts, Science & Commerce Academic Programs"
+        buttonHref="#arts"
+      />
+
+      {/* 11. Arts & Science Courses */}
+      <ArtsScienceSection />
+
+      {/* 12. Form 4: Personal Counselling */}
+      <ReusableEnquirySection
+        id="counselling"
+        badgeText="Personalised Guidance"
+        badgeColor="#26A9E0"
+        title="Looking for personal counselling?"
+        description="Your academic situation is unique. Speak with an advisor who can understand your current course, academic history and goals before discussing possible options."
+        imageSrc="/counselling/advisor_meeting.jpg"
+        imageAlt="Academic counselling"
+        formTitle="Looking Personal Counselling?"
+        formSubtitle="Our academic advisors are ready to understand your situation."
+        formVariant="blue"
+        sectionBg="bg-[#F4F8FA]"
+      />
+
+      {/* 13. Educational & Awareness Videos */}
+      <AwarenessVideosSection />
+
+      {/* 14. Affiliation & Academic Pathways */}
+      <AffiliationSection />
+
+      {/* 15. Recognitions & Accreditation */}
+      <AccreditationSection />
+
+      {/* 16. BANNER 3: Attestation Full Width Image Banner */}
+      <FullWidthBanner
+        imageSrc="/service-banner/Global Embassy Services Banner.png"
+        alt="Global Embassy & Apostille Attestation Services"
+        buttonHref="#attestation"
+      />
+
+      {/* 18. Embassy & Document Attestation */}
+      <AttestationSection />
+
+      {/* 19. Student Reviews & Testimonials */}
+      <TestimonialsSection />
+
+      {/* 20. Form 6: More Information Request */}
+      <MoreDetailsSection />
+
+      {/* 21. Campus & Environment Gallery */}
+      <GallerySection />
+
+      {/* 22. Frequently Asked Questions */}
+      <FAQSection />
+
+      {/* 23. Final Contact & Office Info */}
+      <FinalContactSection />
+
+      <Footer />
+    </main>
   );
 }
