@@ -65,12 +65,12 @@ export function Header() {
         {/* Desktop Navigation Links */}
         <nav className="hidden items-center gap-7 lg:flex">
           {[
-            ["Home", "#home"],
-            ["B.Tech", "#btech"],
-            ["Arts & Science", "#arts"],
-            ["Attestation", "#attestation"],
-            ["About", "#about"],
-            ["Contact", "#contact"],
+            ["Home", "/"],
+            ["B.Tech", "/btech"],
+            ["Arts & Science", "/arts"],
+            ["Attestation", "/attestation"],
+            ["About", "/about"],
+            ["Contact", "/contact"],
           ].map(([label, href]) => (
             <a
               key={label}
@@ -131,12 +131,12 @@ export function Header() {
         <div className="border-t border-neutral-200 bg-white px-5 py-5 text-neutral-900 lg:hidden shadow-lg">
           <div className="flex flex-col">
             {[
-              ["Home", "#home"],
-              ["B.Tech", "#btech"],
-              ["Arts & Science", "#arts"],
-              ["Attestation", "#attestation"],
-              ["About", "#about"],
-              ["Contact", "#contact"],
+              ["Home", "/"],
+              ["B.Tech", "/btech"],
+              ["Arts & Science", "/arts"],
+              ["Attestation", "/attestation"],
+              ["About", "/about"],
+              ["Contact", "/contact"],
             ].map(([label, href]) => (
               <a
                 key={label}

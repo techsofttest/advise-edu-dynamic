@@ -51,14 +51,14 @@ export function HeroSection() {
                 className="inline-flex items-center group cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 {/* Connected Pill/Rectangle */}
-                <div className="flex items-center bg-white text-neutral-950 pl-6 pr-4 py-3.5 rounded-full font-heading text-md font-black shadow-lg group-hover:bg-[#e08316] transition-colors border-r border-neutral-950/20">
+                <div className="flex items-center bg-white text-neutral-950 pl-6 pr-4 py-3.5 rounded-full font-heading text-md font-black shadow-lg group-hover:bg-[#e08316] group-hover:text-white transition-colors border-r border-neutral-950/20">
                   Fill Eligibility Form
                 </div>
 
                 {/* Connected Circle Button */}
-                <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#F6921E] text-neutral-950 shadow-lg group-hover:bg-[#e08316] transition-colors">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#F6921E] text-white shadow-lg group-hover:bg-[#e08316] transition-colors">
                   <svg
-                    className="h-8 w-8 stroke-neutral-950 transform -rotate-55 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"
+                    className="h-8 w-8 stroke-white transform -rotate-55 group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -66,7 +66,7 @@ export function HeroSection() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={3}
+                      strokeWidth={2}
                       d="M19 14l-7 7m0 0l-7-7m7 7V3"
                     />
                   </svg>

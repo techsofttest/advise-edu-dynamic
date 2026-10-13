@@ -36,7 +36,7 @@ export default function HomePage() {
       <FullWidthBanner
         imageSrc="/service-banner/B.Tech Pathways_ Complete Your Degree.png"
         alt="Complete Your B.Tech Journey"
-        buttonHref="#btech"
+        buttonHref="/btech"
       />
 
       {/* 04. B.Tech Credit Transfer Details */}
@@ -73,7 +73,7 @@ export default function HomePage() {
       <FullWidthBanner
         imageSrc="/service-banner/Academic Programs on Campus.png"
         alt="Arts, Science & Commerce Academic Programs"
-        buttonHref="#arts"
+        buttonHref="/arts"
       />
 
       {/* 11. Arts & Science Courses */}
@@ -107,7 +107,7 @@ export default function HomePage() {
       <FullWidthBanner
         imageSrc="/service-banner/Global Embassy Services Banner.png"
         alt="Global Embassy & Apostille Attestation Services"
-        buttonHref="#attestation"
+        buttonHref="/attestation"
       />
 
       {/* 18. Embassy & Document Attestation */}

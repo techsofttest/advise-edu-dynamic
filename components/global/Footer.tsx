@@ -51,19 +51,19 @@ export function Footer() {
             </h4>
 
             <div className="mt-4 flex flex-col gap-3">
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 B.Tech Pathways
               </a>
-              <a href="#arts" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/arts" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Arts & Science
               </a>
-              <a href="#attestation" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/attestation" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Embassy Attestation
               </a>
-              <a href="#counselling" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/#counselling" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Personal Counselling
               </a>
-              <a href="#check-eligibility" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/#check-eligibility" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Check Eligibility
               </a>
             </div>
@@ -76,19 +76,19 @@ export function Footer() {
             </h4>
 
             <div className="mt-4 flex flex-col gap-3">
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Civil Engineering
               </a>
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Mechanical Engineering
               </a>
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Computer Science & Eng.
               </a>
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Electrical & Electronics
               </a>
-              <a href="#btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
+              <a href="/btech" className="text-sm font-medium text-white/80 hover:text-white transition-colors">
                 Automobile Engineering
               </a>
             </div>
@@ -103,7 +103,7 @@ export function Footer() {
             <div className="mt-4 flex flex-col gap-3">
               {attestations.map((item) => (
                 <a
-                  href="#attestation"
+                  href="/attestation"
                   key={item}
                   className="text-sm font-medium text-white/80 hover:text-white transition-colors"
                 >
