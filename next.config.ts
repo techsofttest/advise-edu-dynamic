@@ -10,9 +10,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    agentFeedback: true,
-  },
+
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {
