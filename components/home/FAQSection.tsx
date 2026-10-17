@@ -1,7 +1,10 @@
 import { ChevronDown } from "lucide-react";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { getFaqs } from "@/lib/faq";
 
-export function FAQSection() {
+export async function FAQSection() {
+  const faqs = await getFaqs();
+
   return (
     <section className="bg-white py-20">
       <div className="mx-auto max-w-[1150px] px-6 sm:px-12 md:px-16 lg:px-24">
@@ -18,35 +21,35 @@ export function FAQSection() {
         </ScrollReveal>
 
         <div className="mt-10 divide-y divide-neutral-200 border-y border-neutral-200">
-          {[
-            "What is B.Tech credit transfer?",
-            "Who can enquire about B.Tech credit transfer?",
-            "Can I continue my degree after an academic interruption?",
-            "Which documents may be required?",
-            "What B.Tech branches are available?",
-            "What Arts and Science programmes are available?",
-            "How can I speak with an academic counsellor?",
-          ].map((question, index) => (
-            <ScrollReveal key={question} delay={(index % 7) * 50}>
-              <details className="group">
-                <summary className="flex cursor-pointer list-none items-center justify-between py-5 text-base font-semibold text-neutral-900">
-                  {question}
-                  <ChevronDown
-                    size={18}
-                    className="transition-transform group-open:rotate-180"
-                  />
-                </summary>
+          {faqs.length > 0 ? (
+            faqs.map((faq, index) => (
+              <ScrollReveal key={faq.id} delay={(index % 7) * 50}>
+                <details className="group">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-base font-semibold text-neutral-900">
+                    <span>{faq.question}</span>
 
-                <div className="pb-5 pr-8 text-sm leading-6 text-neutral-700 font-medium">
-                  Contact Advise Edu for guidance specific to your academic
-                  situation and programme.
-                </div>
-              </details>
-            </ScrollReveal>
-          ))}
+                    <ChevronDown
+                      size={18}
+                      className="shrink-0 transition-transform group-open:rotate-180"
+                    />
+                  </summary>
+
+                  <div
+                    className="pb-5 pr-8 text-sm font-medium leading-6 text-neutral-700 [&_p]:mb-2 [&_p:last-child]:mb-0"
+                    dangerouslySetInnerHTML={{
+                      __html: faq.answer,
+                    }}
+                  />
+                </details>
+              </ScrollReveal>
+            ))
+          ) : (
+            <p className="py-6 text-center text-sm text-neutral-600">
+              No FAQs are available at the moment.
+            </p>
+          )}
         </div>
       </div>
     </section>
   );
 }
-

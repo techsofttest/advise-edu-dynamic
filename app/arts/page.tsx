@@ -14,6 +14,7 @@ import { AccreditationSection } from "@/components/home/AccreditationSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
+import { getPages } from "@/lib/page";
 
 export const metadata = {
   title: "Arts, Science & Commerce Degree Programs | Advise Edu",
@@ -21,7 +22,9 @@ export const metadata = {
     "Explore undergraduate and postgraduate programs across BA, B.Com, B.Sc, BBA, BCA, MBA, MCA, MSW, and Psychology with UGC-recognized universities.",
 };
 
-export default function ArtsSciencePage() {
+export default async function ArtsSciencePage() {
+  const pages = await getPages();
+  const personalisedGuidance = pages.personalised_guidance;
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
@@ -51,13 +54,23 @@ export default function ArtsSciencePage() {
       <AdmissionStepsSection />
 
       {/* 06. Dedicated Arts & Science Admissions Form */}
+      {/* 06. Personalised Guidance */}
       <ReusableEnquirySection
         id="enquiry"
-        badgeText="Personalised Guidance"
+        badgeText={personalisedGuidance?.name || "Personalised Guidance"}
         badgeColor="#26A9E0"
-        title="Flexible Degree Pathways for Arts, Science & Commerce"
-        description="Whether you are aiming for career progression, completing a discontinued program, or seeking degree equivalency, our advisors help you navigate legal and verified university admissions."
-        imageSrc="/admission/Friends Strolling Through Campus.png"
+        title={
+          personalisedGuidance?.heading ||
+          "Flexible Degree Pathways for Arts, Science & Commerce"
+        }
+        description={
+          personalisedGuidance?.description ||
+          "Whether you are aiming for career progression, completing a discontinued program, or seeking degree equivalency, our advisors help you navigate legal and verified university admissions."
+        }
+        imageSrc={
+          personalisedGuidance?.image ||
+          "/admission/Friends Strolling Through Campus.png"
+        }
         imageAlt="Students on campus discussing education"
         formTitle="Arts & Science Enquiry"
         formSubtitle="Tell us which degree or course you are interested in."

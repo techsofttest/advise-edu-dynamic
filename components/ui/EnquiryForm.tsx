@@ -45,17 +45,19 @@ function FloatingInput({
         onChange={(e) => setValue(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className={`h-12 w-full rounded-lg border bg-white px-3.5 pt-4 pb-1 text-sm font-medium text-neutral-900 outline-none transition-all duration-200 ${isFocused
-          ? "border-[#1B75BB] ring-2 ring-[#1B75BB]/20"
-          : "border-neutral-300 hover:border-neutral-400"
-          }`}
+        className={`h-12 w-full rounded-lg border bg-white px-3.5 pt-4 pb-1 text-sm font-medium text-neutral-900 outline-none transition-all duration-200 ${
+          isFocused
+            ? "border-[#1B75BB] ring-2 ring-[#1B75BB]/20"
+            : "border-neutral-300 hover:border-neutral-400"
+        }`}
       />
       <label
         htmlFor={id}
-        className={`pointer-events-none absolute left-3.5 transition-all duration-200 ease-in-out ${isFloating
-          ? "top-1 text-[11px] font-semibold text-neutral-600"
-          : "top-3.5 text-sm font-medium text-neutral-500"
-          }`}
+        className={`pointer-events-none absolute left-3.5 transition-all duration-200 ease-in-out ${
+          isFloating
+            ? "top-1 text-[11px] font-semibold text-neutral-600"
+            : "top-3.5 text-sm font-medium text-neutral-500"
+        }`}
       >
         {label}
         {required && <span className="ml-0.5 text-red-500">*</span>}
@@ -75,37 +77,41 @@ export function EnquiryForm({
 
   const formStyles = {
     orange: {
-      bg: COLORS.accent,        // #F6921E
+      bg: COLORS.accent, // #F6921E
       text: "text-white",
       subtext: "text-white/90",
-      buttonClass: "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
+      buttonClass:
+        "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
     },
     blue: {
-      bg: COLORS.primary,       // #1B75BB
+      bg: COLORS.primary, // #1B75BB
       text: "text-white",
       subtext: "text-white/90",
-      buttonClass: "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
+      buttonClass:
+        "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
     },
     green: {
-      bg: COLORS.secondary,     // #26A9E0
+      bg: COLORS.secondary, // #26A9E0
       text: "text-white",
       subtext: "text-white/90",
-      buttonClass: "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
+      buttonClass:
+        "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
     },
     darkBlue: {
-      bg: COLORS.primaryDark,   // #125488
+      bg: COLORS.primaryDark, // #125488
       text: "text-white",
       subtext: "text-white/90",
-      buttonClass: "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
+      buttonClass:
+        "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
     },
     gold: {
-      bg: COLORS.accentLight,   // #FAAF40
+      bg: COLORS.accentLight, // #FAAF40
       text: "text-neutral-950",
       subtext: "text-neutral-800",
-      buttonClass: "bg-[#125488] hover:bg-[#0e436d] !text-white border-[#125488]",
+      buttonClass:
+        "bg-[#125488] hover:bg-[#0e436d] !text-white border-[#125488]",
     },
   };
-
 
   const current = formStyles[variant];
 
@@ -117,12 +123,16 @@ export function EnquiryForm({
       }}
     >
       <div className="mb-6">
-        <h3 className={`font-heading text-2xl font-bold tracking-tight sm:text-3xl ${current.text}`}>
+        <h3
+          className={`font-heading text-2xl font-bold tracking-tight sm:text-3xl ${current.text}`}
+        >
           {title}
         </h3>
 
         {subtitle && (
-          <p className={`mt-1.5 text-sm leading-relaxed font-medium ${current.subtext}`}>
+          <p
+            className={`mt-1.5 text-sm leading-relaxed font-medium ${current.subtext}`}
+          >
             {subtitle}
           </p>
         )}
@@ -130,9 +140,7 @@ export function EnquiryForm({
 
       {submitted ? (
         <div className="bg-white rounded-xl p-8 text-center shadow-sm">
-          <CheckCircle2
-            className="mx-auto mb-3 h-10 w-10 text-[#26A9E0]"
-          />
+          <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-[#26A9E0]" />
 
           <p className="text-base font-bold text-neutral-900">
             Thank you. Our advisor will contact you shortly.
@@ -148,14 +156,36 @@ export function EnquiryForm({
         >
           {/* Row 1: Name & Phone Number */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FloatingInput label="Name" required />
-            <FloatingInput label="Phone Number" type="tel" required />
+            <FloatingInput label="Full Name" required />
+            <FloatingInput label="Mobile Number" type="tel" required />
           </div>
 
           {/* Row 2: Email & Course */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FloatingInput label="Email" type="email" />
-            <FloatingInput label="Course" />
+            <FloatingInput label="Email Address" type="email" />
+
+            <div className="relative">
+              <select
+                name="course"
+                id="course"
+                required
+                defaultValue=""
+                className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-gray-700 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              >
+                <option value="" disabled>
+                  Select Your Course
+                </option>
+                <option value="btech">B.Tech</option>
+                <option value="ba">B.A.</option>
+                <option value="bcom">B.Com.</option>
+                <option value="bsc">B.Sc.</option>
+                <option value="bba">BBA</option>
+                <option value="bca">BCA</option>
+                <option value="mba">MBA</option>
+                <option value="mca">MCA</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
           </div>
 
           {/* Row 3: Branch & Completion Year */}
@@ -169,9 +199,7 @@ export function EnquiryForm({
           )}
 
           {/* Row 4: Previous University Name */}
-          {!compact && (
-            <FloatingInput label="Previous University Name" />
-          )}
+          {!compact && <FloatingInput label="Previous University Name" />}
 
           <div className="pt-2">
             <Button
@@ -188,4 +216,3 @@ export function EnquiryForm({
     </div>
   );
 }
-

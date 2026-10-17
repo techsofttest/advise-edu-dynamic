@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { getContact, type ContactData } from "@/lib/contact";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -11,42 +12,67 @@ export function Header() {
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  const [contact, setContact] = useState<ContactData>({
+    id: 0,
+    address: "",
+    phone: "",
+    email: "",
+    opening_hours: "",
+  });
+
+  // Fetch contact information from the API
+  useEffect(() => {
+    let active = true;
+
+    async function loadContact() {
+      const data = await getContact();
+
+      if (active) {
+        setContact(data);
+      }
+    }
+
+    loadContact();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Handle header scroll behavior
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Track if page is scrolled past hero threshold
-      if (currentScrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(currentScrollY > 50);
 
-      // Hide header when scrolling down, show header when scrolling up
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setVisible(false);
-      } else {
-        setVisible(true);
-      }
+      setVisible(!(currentScrollY > lastScrollY && currentScrollY > 100));
 
       setLastScrollY(currentScrollY);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [lastScrollY]);
 
   const isTransparent = !scrolled && !open;
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform ${visible || open
-        ? "translate-y-0 opacity-100"
-        : "-translate-y-full opacity-0 pointer-events-none"
-        } ${isTransparent
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform ${
+        visible || open
+          ? "translate-y-0 opacity-100"
+          : "-translate-y-full opacity-0 pointer-events-none"
+      } ${
+        isTransparent
           ? "bg-transparent border-b border-white/10"
           : "bg-white/95 backdrop-blur-md border-b border-neutral-200 shadow-sm text-neutral-900"
-        }`}
+      }`}
     >
       <div className="mx-auto flex h-[88px] max-w-[1440px] items-center justify-between px-6 sm:px-12 md:px-16 lg:px-24">
         {/* Logo */}
@@ -56,13 +82,14 @@ export function Header() {
             alt="Advise Edu"
             fill
             sizes="145px"
-            className={`object-contain object-left transition-all duration-300 ${isTransparent ? "brightness-0 invert" : ""
-              }`}
+            className={`object-contain object-left transition-all duration-300 ${
+              isTransparent ? "brightness-0 invert" : ""
+            }`}
             priority
           />
         </a>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation */}
         <nav className="hidden items-center gap-7 lg:flex">
           {[
             ["Home", "/"],
@@ -75,19 +102,20 @@ export function Header() {
             <a
               key={label}
               href={href}
-              className={`text-sm font-semibold transition-colors ${isTransparent
-                ? "text-white hover:text-[#FAAF40]"
-                : "text-neutral-800 hover:text-[#1B75BB]"
-                }`}
+              className={`text-sm font-semibold transition-colors ${
+                isTransparent
+                  ? "text-white hover:text-[#FAAF40]"
+                  : "text-neutral-800 hover:text-[#1B75BB]"
+              }`}
             >
               {label}
             </a>
           ))}
         </nav>
 
-        {/* Right Action Area (Desktop) */}
+        {/* Desktop Contact */}
         <div className="hidden items-center gap-3.5 lg:flex">
-          {/* 24/7 Custom SVG Icon */}
+          {/* 24/7 Support Icon */}
           <svg
             width="40"
             height="40"
@@ -103,32 +131,36 @@ export function Header() {
             />
           </svg>
 
-          {/* Contact Number Button */}
-          <Button
-            href="tel:+919000000000"
-            variant="orange"
-            size="sm"
-            className="normal-case font-bold"
-          >
-            <Phone size={16} />
-            <span>+91 90000 00000</span>
-          </Button>
+          {/* Dynamic Contact Number */}
+          {contact.phone && (
+            <Button
+              href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+              variant="orange"
+              size="sm"
+              className="normal-case font-bold"
+            >
+              <Phone size={16} />
+              <span>{contact.phone}</span>
+            </Button>
+          )}
         </div>
 
-        {/* Mobile Hamburger Toggle */}
+        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setOpen(!open)}
-          className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden ${isTransparent ? "text-white" : "text-neutral-900"
-            }`}
+          className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden ${
+            isTransparent ? "text-white" : "text-neutral-900"
+          }`}
           aria-label="Toggle navigation"
+          aria-expanded={open}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Menu */}
       {open && (
-        <div className="border-t border-neutral-200 bg-white px-5 py-5 text-neutral-900 lg:hidden shadow-lg">
+        <div className="border-t border-neutral-200 bg-white px-5 py-5 text-neutral-900 shadow-lg lg:hidden">
           <div className="flex flex-col">
             {[
               ["Home", "/"],
@@ -148,17 +180,20 @@ export function Header() {
               </a>
             ))}
 
-            <Button
-              href="tel:+919000000000"
-              onClick={() => setOpen(false)}
-              variant="orange"
-              size="lg"
-              fullWidth
-              className="mt-4 normal-case text-base py-4 min-h-[60px]"
-            >
-              <Phone size={22} />
-              <span>Call +91 90000 00000</span>
-            </Button>
+            {/* Dynamic Mobile Contact Number */}
+            {contact.phone && (
+              <Button
+                href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+                onClick={() => setOpen(false)}
+                variant="orange"
+                size="lg"
+                fullWidth
+                className="mt-4 min-h-[60px] py-4 normal-case text-base"
+              >
+                <Phone size={22} />
+                <span>Call {contact.phone}</span>
+              </Button>
+            )}
           </div>
         </div>
       )}

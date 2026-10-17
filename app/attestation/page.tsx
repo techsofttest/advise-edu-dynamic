@@ -14,6 +14,7 @@ import { AccreditationSection } from "@/components/home/AccreditationSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
+import { getPages } from "@/lib/page";
 
 export const metadata = {
   title: "Embassy Attestation & Apostille Services | Advise Edu",
@@ -21,7 +22,9 @@ export const metadata = {
     "Fast and verified embassy attestation services for UAE, Saudi Arabia, Qatar, Kuwait, Bahrain, and Apostille countries for overseas education and employment.",
 };
 
-export default function AttestationPage() {
+export default async function AttestationPage() {
+  const pages = await getPages();
+  const embassyVerification = pages.embassy_verification?.content1;
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
@@ -47,14 +50,23 @@ export default function AttestationPage() {
         buttonHref="#check-eligibility"
       />
 
-      {/* 06. Dedicated Attestation Submission Form */}
+      {/* 06. Dynamic Embassy Verification Form */}
       <ReusableEnquirySection
         id="enquiry"
-        badgeText="Embassy Verification"
+        badgeText={embassyVerification?.title || "Embassy Verification"}
         badgeColor="#F6921E"
-        title="Start Your Certificate Attestation Process"
-        description="We assist with degree certificates, diploma certificates, marksheets, and personal documents with expedited government and destination embassy stamping."
-        imageSrc="/admission/Collaborative Office Document Review.png"
+        title={
+          embassyVerification?.heading ||
+          "Start Your Certificate Attestation Process"
+        }
+        description={
+          embassyVerification?.description ||
+          "We assist with degree certificates, diploma certificates, marksheets, and personal documents with expedited government and destination embassy stamping."
+        }
+        imageSrc={
+          embassyVerification?.image ||
+          "/admission/Collaborative Office Document Review.png"
+        }
         imageAlt="Document review for embassy attestation"
         formTitle="Attestation Request"
         formSubtitle="Tell us your certificate type and destination country."

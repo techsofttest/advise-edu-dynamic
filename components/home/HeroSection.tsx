@@ -1,11 +1,22 @@
 import Image from "next/image";
-import { CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
-export function HeroSection() {
+interface HeroSectionProps {
+  banner: {
+    id: number;
+    heading1: string;
+    heading2: string;
+    subtitle: string;
+    description: string;
+  };
+}
+
+export function HeroSection({ banner }: HeroSectionProps) {
   return (
-    <section id="home" className="relative w-full lg:h-screen pt-20 overflow-hidden bg-neutral-900 text-white">
+    <section
+      id="home"
+      className="relative w-full lg:h-screen pt-20 overflow-hidden bg-neutral-900 text-white"
+    >
       {/* Background Image */}
       <Image
         src="/home-hero/h7.png"
@@ -19,19 +30,21 @@ export function HeroSection() {
       {/* Gradient Overlay for Text Contrast */}
       <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-950/40 to-transparent" />
 
-      {/* Content Container: Header Top Left, Description & Buttons Bottom Left */}
+      {/* Content Container */}
       <div className="relative z-10 mx-auto flex h-full min-h-[550px] max-w-[1440px] flex-col justify-between px-6 py-12 sm:px-12 md:px-16 lg:px-24 lg:py-20">
         {/* Top Left Header */}
         <ScrollReveal delay={100}>
           <div className="max-w-[800px]">
             <h1 className="font-heading text-[42px] font-bold leading-[0.98] tracking-[-0.035em] text-white sm:text-[58px] lg:text-[72px]">
-              Restart & Complete
-              <br />
-              Your Degree
+              {banner.heading1}
             </h1>
 
+            <h2 className="font-heading text-[42px] font-bold leading-[0.98] tracking-[-0.035em] text-white sm:text-[58px] lg:text-[72px]">
+              {banner.heading2}
+            </h2>
+
             <p className="mt-3 text-base font-bold text-white sm:text-xl md:text-2xl">
-              Failed Subjects | Backlogs & Arrears | Credit Transfer
+              {banner.subtitle}
             </p>
           </div>
         </ScrollReveal>
@@ -40,9 +53,7 @@ export function HeroSection() {
         <ScrollReveal delay={250}>
           <div className="mt-8 max-w-[650px]">
             <p className="text-lg leading-7 text-neutral-200 font-medium sm:text-md">
-              Don&apos;t let failed subjects, backlogs, or course interruptions stop your progress.
-              Discover legal, university-recognized academic pathways to complete your
-              B.Tech, Arts, Science, or Commerce degree with Advise Edu.
+              {banner.description}
             </p>
 
             <div className="mt-8">
@@ -52,7 +63,7 @@ export function HeroSection() {
               >
                 {/* Connected Pill/Rectangle */}
                 <div className="flex items-center bg-white text-neutral-950 pl-6 pr-4 py-3.5 rounded-full font-heading text-md font-black shadow-lg group-hover:bg-[#e08316] group-hover:text-white transition-colors border-r border-neutral-950/20">
-                  Fill Eligibility Form
+                  Check My Eligibility Now
                 </div>
 
                 {/* Connected Circle Button */}
@@ -73,13 +84,9 @@ export function HeroSection() {
                 </div>
               </a>
             </div>
-
-
-
           </div>
         </ScrollReveal>
       </div>
-
     </section>
   );
 }

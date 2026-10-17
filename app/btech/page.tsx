@@ -15,6 +15,7 @@ import { AccreditationSection } from "@/components/home/AccreditationSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
+import { getPages } from "@/lib/page";
 
 export const metadata = {
   title: "B.Tech Credit Transfer & Degree Completion | Advise Edu",
@@ -22,7 +23,10 @@ export const metadata = {
     "Complete your B.Tech engineering degree through legal credit transfer, backlog clearance, and lateral entry in UGC & AICTE recognized universities.",
 };
 
-export default function BTechPage() {
+export default async function BTechPage() {
+  const pages = await getPages();
+  const engineeringAdmissions = pages.engineering_admissions?.content1;
+
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
@@ -46,7 +50,7 @@ export default function BTechPage() {
 
       {/* 05. Service Banner */}
       <FullWidthBanner
-        imageSrc="/service-banner/B.Tech Pathways_ Complete Your Degree.png"
+        imageSrc="/service-banner/B.Tech Pathways_ Complete Your Degree_upd.png"
         alt="B.Tech Pathways Complete Your Degree"
         buttonHref="#check-eligibility"
       />
@@ -57,11 +61,19 @@ export default function BTechPage() {
       {/* 07. Dedicated Engineering Admissions Form */}
       <ReusableEnquirySection
         id="enquiry"
-        badgeText="Engineering Admissions"
+        badgeText={engineeringAdmissions?.title || "Engineering Admissions"}
         badgeColor="#1B75BB"
-        title="Fast-Track Your B.Tech Admission Evaluation"
-        description="Submit your previous semester marksheets and diploma transcripts. Our senior advisors will analyze your syllabus mapping and recommend legitimate UGC-approved university options."
-        imageSrc="/admission/engineers_lab.jpg"
+        title={
+          engineeringAdmissions?.heading ||
+          "Fast-Track Your B.Tech Admission Evaluation"
+        }
+        description={
+          engineeringAdmissions?.description ||
+          "Submit your previous semester marksheets and diploma transcripts. Our senior advisors will analyze your syllabus mapping and recommend legitimate UGC-approved university options."
+        }
+        imageSrc={
+          engineeringAdmissions?.image || "/admission/engineers_lab.jpg"
+        }
         imageAlt="Engineering students in laboratory"
         formTitle="B.Tech Admission Enquiry"
         formSubtitle="Share your diploma or engineering semester details."

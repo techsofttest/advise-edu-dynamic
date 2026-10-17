@@ -19,11 +19,11 @@ interface ReusableEnquirySectionProps {
 }
 
 const containerBgMap: Record<FormVariant, string> = {
-  blue: COLORS.primaryDark,   // #125488
-  green: "#1B7FA9",           // Rich Dark Cyan/Blue
-  orange: "#D97800",          // Rich Dark Orange
-  darkBlue: "#0B3A60",        // Deep Navy
-  gold: "#D98E20",            // Rich Dark Gold
+  blue: COLORS.primaryDark, // #125488
+  green: "#1B7FA9", // Rich Dark Cyan/Blue
+  orange: "#D97800", // Rich Dark Orange
+  darkBlue: "#0B3A60", // Deep Navy
+  gold: "#D98E20", // Rich Dark Gold
 };
 
 export function ReusableEnquirySection({
@@ -51,22 +51,18 @@ export function ReusableEnquirySection({
             >
               {badgeText}
             </span>
-
             <h2 className="font-heading mt-4 max-w-[650px] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] sm:text-5xl">
               {title}
             </h2>
-
             <p className="mt-5 max-w-[620px] text-base leading-7 text-neutral-800">
               {description}
             </p>
 
             <div className="mt-8 relative min-h-[260px] max-w-[620px] overflow-hidden rounded-2xl">
-              <Image
+              <img
                 src={imageSrc}
                 alt={imageAlt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
           </div>

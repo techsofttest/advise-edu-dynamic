@@ -7,19 +7,22 @@ export interface PageHeroProps {
   bgImage?: string;
 }
 
-export function PageHero({ badge, title, description, bgImage }: PageHeroProps) {
-  const imageSrc = bgImage || "/banner/Curly-Haired Artist in a Sunlit Studio.png";
+export function PageHero({
+  badge,
+  title,
+  description,
+  bgImage,
+}: PageHeroProps) {
+  const imageSrc =
+    bgImage || "/banner/Curly-Haired Artist in a Sunlit Studio.png";
 
   return (
     <section className="relative pt-32 pb-20 bg-neutral-900 text-white overflow-hidden">
       {/* Background Image Layer */}
-      <Image
+      <img
         src={imageSrc}
         alt={title}
-        fill
-        sizes="100vw"
-        className="object-cover object-center"
-        priority
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
       {/* Brand Gradient Overlay - dark on left for text legibility, transparent on right for image visibility */}
