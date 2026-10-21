@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { getPages } from "@/lib/page";
 import type { RecognitionsApprovals } from "@/lib/page";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -22,7 +21,10 @@ export function AccreditationSection() {
           setData({
             ...apiData,
             recognitions: Array.isArray(apiData.recognitions)
-              ? apiData.recognitions
+              ? apiData.recognitions.map((item) => ({
+                  heading: item?.heading ?? "",
+                  items: Array.isArray(item?.items) ? item.items : [],
+                }))
               : [],
           });
         }
@@ -56,6 +58,10 @@ export function AccreditationSection() {
 
   if (!data) return null;
 
+  const recognitions = data.recognitions.filter(
+    (item) => item.heading || item.items.length > 0,
+  );
+
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-12 md:px-16 lg:px-24">
@@ -72,38 +78,35 @@ export function AccreditationSection() {
 
             <p className="mx-auto mt-3 max-w-2xl text-base font-medium text-neutral-600">
               {data.description ||
-                "University approvals ensuring legal validity, degree equivalence, and national educational standards."}
+                "Explore academic recognition and credential evaluation frameworks."}
             </p>
           </div>
         </ScrollReveal>
 
         {/* Dynamic Recognition Cards */}
         <div className="flex flex-wrap justify-center gap-8">
-          {data.recognitions.map((item, idx) => (
+          {recognitions.map((item, idx) => (
             <ScrollReveal
-              key={`${item.name}-${idx}`}
+              key={`${item.heading}-${idx}`}
               delay={120 * (idx + 1)}
               className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
             >
-              <div className="flex h-full flex-col justify-between rounded-2xl border border-neutral-200/80 bg-white p-7 shadow-sm transition-all duration-300 hover:border-[#F6921E]/40 hover:shadow-md">
-                <div>
-                  {/* Badge and Logo */}
-                  <div className="mb-3 flex items-start justify-between gap-4">
-                    <div className="inline-block font-bold text-gray-900">
-                      {item.name}
-                    </div>
-                  </div>
+              <div className="flex h-full flex-col rounded-2xl border border-neutral-200/80 bg-white p-7 shadow-sm transition-all duration-300 hover:border-[#F6921E]/40 hover:shadow-md">
+                <h3 className="font-heading mb-5 text-xl font-bold leading-snug text-neutral-900">
+                  {item.heading}
+                </h3>
 
-                  {/* Dynamic Title */}
-                  <h3 className="font-heading mb-4 max-w-[80%] text-xl font-bold leading-snug text-neutral-900">
-                    {item.heading}
-                  </h3>
-
-                  {/* Dynamic Description */}
-                  <p className="text-sm font-medium leading-6 text-neutral-600">
-                    {item.description}
-                  </p>
-                </div>
+                <ul className="space-y-3">
+                  {item.items.map((recognition, itemIdx) => (
+                    <li
+                      key={`${recognition}-${itemIdx}`}
+                      className="flex items-start gap-3 text-sm font-medium leading-6 text-neutral-600"
+                    >
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F6921E]" />
+                      <span>{recognition}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </ScrollReveal>
           ))}

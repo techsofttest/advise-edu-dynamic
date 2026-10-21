@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Header } from "@/components/global/Header";
 import { Footer } from "@/components/global/Footer";
 import { PageHero } from "@/components/ui/PageHero";
@@ -16,24 +18,109 @@ import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
 
-export const metadata = {
-  title: "Arts, Science & Commerce Degree Programs | Advise Edu",
-  description:
-    "Explore undergraduate and postgraduate programs across BA, B.Com, B.Sc, BBA, BCA, MBA, MCA, MSW, and Psychology with UGC-recognized universities.",
-};
+interface ArtsScienceApiResponse {
+  status: boolean;
+  data: {
+    seo?: {
+      id: number;
+      meta_title?: string | null;
+      meta_description?: string | null;
+      meta_keywords?: string | null;
+    };
+    banner?: {
+      id: number;
+      tag?: string | null;
+      heading1?: string | null;
+      heading2?: string | null;
+      description?: string | null;
+    };
+  };
+}
+
+async function getArtsScienceData(): Promise<
+  ArtsScienceApiResponse["data"] | null
+> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiUrl) {
+    console.error("NEXT_PUBLIC_API_URL is not configured.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/arts-science`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`Arts & Science API request failed: ${response.status}`);
+    }
+
+    const result: ArtsScienceApiResponse = await response.json();
+
+    return result.status ? result.data : null;
+  } catch (error) {
+    console.error("Failed to fetch Arts & Science API data:", error);
+    return null;
+  }
+}
+
+function plainText(value?: string | null): string {
+  return (value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const apiData = await getArtsScienceData();
+  const seo = apiData?.seo;
+
+  return {
+    title:
+      plainText(seo?.meta_title) ||
+      "Arts, Science & Commerce Degree Programs | Advise Edu",
+    description:
+      plainText(seo?.meta_description) ||
+      "Explore undergraduate and postgraduate programs across BA, B.Com, B.Sc, BBA, BCA, MBA, MCA, MSW, and Psychology with UGC-recognized universities.",
+    keywords: plainText(seo?.meta_keywords) || undefined,
+  };
+}
 
 export default async function ArtsSciencePage() {
-  const pages = await getPages();
-  const personalisedGuidance = pages.personalised_guidance;
+  const [apiData, pages] = await Promise.all([
+    getArtsScienceData(),
+    getPages(),
+  ]);
+
+  const banner = apiData?.banner;
+  const personalisedGuidance = pages?.personalised_guidance;
+
+  const bannerTag = plainText(banner?.tag) || "Undergraduate & Postgraduate";
+
+  const heading1 = plainText(banner?.heading1) || "Arts, Science & Commerce";
+
+  const heading2 = plainText(banner?.heading2) || "Academic Programs";
+
+  const bannerDescription =
+    plainText(banner?.description) ||
+    "Explore flexible degree programs tailored for management, computing, sciences, commerce, psychology, and humanities across recognized universities.";
+
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
 
-      {/* 01. Detailed Page Hero */}
+      {/* 01. Dynamic Page Hero */}
       <PageHero
-        badge="Undergraduate & Postgraduate"
-        title="Arts, Science & Commerce Academic Programs"
-        description="Explore flexible degree programs tailored for management, computing, sciences, commerce, psychology, and humanities across recognized universities."
+        badge={bannerTag}
+        title={`${heading1} ${heading2}`.trim()}
+        description={bannerDescription}
         bgImage="/banner/Smiling Student on a Sunlit Campus.png"
       />
 
@@ -53,7 +140,6 @@ export default async function ArtsSciencePage() {
       {/* 05. Admission Process Roadmap */}
       <AdmissionStepsSection />
 
-      {/* 06. Dedicated Arts & Science Admissions Form */}
       {/* 06. Personalised Guidance */}
       <ReusableEnquirySection
         id="enquiry"
@@ -79,10 +165,10 @@ export default async function ArtsSciencePage() {
         sectionBg="bg-[#F4F8FA]"
       />
 
-      {/* 08. University Reputation & Experience */}
+      {/* 07. University Reputation & Experience */}
       <UniversityReputationSection />
 
-      {/* 07. Talk with Counsellor */}
+      {/* 08. Talk with Counsellor */}
       <CounsellorSection />
 
       {/* 09. Educational & Awareness Videos */}

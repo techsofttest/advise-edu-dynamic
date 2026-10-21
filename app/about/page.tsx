@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Header } from "@/components/global/Header";
 import { Footer } from "@/components/global/Footer";
 import { PageHero } from "@/components/ui/PageHero";
@@ -10,15 +12,97 @@ import { AccreditationSection } from "@/components/home/AccreditationSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 
-export default function AboutPage() {
+interface AboutApiResponse {
+  status: boolean;
+  data: {
+    seo?: {
+      id: number;
+      meta_title?: string | null;
+      meta_description?: string | null;
+      meta_keywords?: string | null;
+    };
+    banner?: {
+      id: number;
+      tag?: string | null;
+      heading1?: string | null;
+      heading2?: string | null;
+      heading3?: string | null;
+    };
+  };
+}
+
+async function getAboutData(): Promise<AboutApiResponse["data"] | null> {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (!apiUrl) {
+    console.error("NEXT_PUBLIC_API_URL is not configured.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/about`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`About API request failed: ${response.status}`);
+    }
+
+    const result: AboutApiResponse = await response.json();
+
+    return result.status ? result.data : null;
+  } catch (error) {
+    console.error("Failed to fetch About API data:", error);
+    return null;
+  }
+}
+
+function plainText(value?: string | null): string {
+  return (value ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const apiData = await getAboutData();
+  const seo = apiData?.seo;
+
+  return {
+    title: plainText(seo?.meta_title) || "About Us | Advise Edu",
+    description:
+      plainText(seo?.meta_description) ||
+      "Learn about Advise Edu and our commitment to helping students access recognized university pathways.",
+    keywords: plainText(seo?.meta_keywords) || undefined,
+  };
+}
+
+export default async function AboutPage() {
+  const apiData = await getAboutData();
+  const banner = apiData?.banner;
+
+  const badge = plainText(banner?.tag) || "About Advise Edu";
+
+  const heading1 = plainText(banner?.heading1) || "Empowering Students";
+
+  const heading2 = plainText(banner?.heading2) || "Through Recognized";
+
+  const heading3 = plainText(banner?.heading3) || "University Pathways";
+
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
 
-      {/* Shared Page Hero Banner */}
+      {/* Shared Dynamic Page Hero Banner */}
       <PageHero
-        badge="About Advise Edu"
-        title="Empowering Students Through Recognized University Pathways"
+        badge={badge}
+        title={`${heading1} ${heading2} ${heading3}`.trim()}
       />
 
       {/* Modular Section 1: Who We Are & Team Background */}

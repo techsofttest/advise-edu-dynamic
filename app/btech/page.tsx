@@ -16,26 +16,93 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
+import type { Metadata } from "next";
 
-export const metadata = {
-  title: "B.Tech Credit Transfer & Degree Completion | Advise Edu",
-  description:
-    "Complete your B.Tech engineering degree through legal credit transfer, backlog clearance, and lateral entry in UGC & AICTE recognized universities.",
-};
+interface BtechApiResponse {
+  status: boolean;
+  data: {
+    seo: {
+      id: number;
+      meta_title: string;
+      meta_description: string;
+      meta_keywords: string;
+    };
+    banner: {
+      id: number;
+      tag: string;
+      heading1: string;
+      heading2: string;
+      description: string;
+    };
+  };
+}
+
+// Fetch B.Tech SEO and banner data directly from Laravel
+async function getBtechData(): Promise<BtechApiResponse["data"] | null> {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    if (!apiUrl) {
+      console.error("NEXT_PUBLIC_API_URL is not configured.");
+      return null;
+    }
+
+    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/btech`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error(`B.Tech API request failed: ${response.status}`);
+    }
+
+    const result: BtechApiResponse = await response.json();
+
+    return result.status ? result.data : null;
+  } catch (error) {
+    console.error("Failed to fetch B.Tech API data:", error);
+    return null;
+  }
+}
+
+// Dynamic SEO metadata
+export async function generateMetadata(): Promise<Metadata> {
+  const btechData = await getBtechData();
+  const seo = btechData?.seo;
+
+  return {
+    title:
+      seo?.meta_title ||
+      "B.Tech Credit Transfer & Degree Completion | Advise Edu",
+    description:
+      seo?.meta_description ||
+      "Complete your B.Tech engineering degree through credit transfer, backlog clearance, and recognized university pathways.",
+    keywords: seo?.meta_keywords || undefined,
+  };
+}
 
 export default async function BTechPage() {
-  const pages = await getPages();
+  const [pages, btechData] = await Promise.all([getPages(), getBtechData()]);
+
   const engineeringAdmissions = pages.engineering_admissions?.content1;
+
+  const banner = btechData?.banner;
+
+  const bannerTag = banner?.tag || "B.Tech Pathways";
+  const bannerHeading1 = banner?.heading1 || "Complete Your B.Tech";
+  const bannerHeading2 = banner?.heading2 || "Degree With Confidence";
+  const bannerDescription =
+    banner?.description ||
+    "Understand credit transfer options, backlog clearing, and recognized university pathways tailored for your engineering discipline.";
 
   return (
     <main className="min-h-screen bg-white text-neutral-900 font-body">
       <Header />
 
-      {/* 01. Detailed Page Hero */}
+      {/* 01. Dynamic B.Tech Banner */}
       <PageHero
-        badge="B.Tech Pathways"
-        title="Complete Your B.Tech Degree With Confidence"
-        description="Understand credit transfer options, backlog clearing, and recognized university pathways tailored for your engineering discipline."
+        badge={bannerTag}
+        title={`${bannerHeading1} ${bannerHeading2}`.trim()}
+        description={bannerDescription}
         bgImage="/banner/Collaborative Robotics Lab Workshop.png"
       />
 
@@ -82,10 +149,10 @@ export default async function BTechPage() {
         sectionBg="bg-white"
       />
 
-      {/* 09. University Reputation & Experience */}
+      {/* 08. University Reputation & Experience */}
       <UniversityReputationSection />
 
-      {/* 08. Talk with Counsellor */}
+      {/* 09. Talk with Counsellor */}
       <CounsellorSection />
 
       {/* 10. Educational & Awareness Videos */}
