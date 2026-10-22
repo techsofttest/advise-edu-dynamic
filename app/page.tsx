@@ -36,6 +36,7 @@ interface HomeBannerData {
   heading2: string;
   subtitle: string;
   description: string;
+  image: string | null;
 }
 
 interface HomeApiResponse {
@@ -59,6 +60,7 @@ const emptyHomeData: HomeApiResponse["data"] = {
     heading2: "",
     subtitle: "",
     description: "",
+    image: null,
   },
 };
 
@@ -99,6 +101,7 @@ async function getHomeData(): Promise<HomeApiResponse["data"]> {
         heading2: result.data.banner?.heading2 ?? "",
         subtitle: result.data.banner?.subtitle ?? "",
         description: result.data.banner?.description ?? "",
+        image: result.data.banner?.image ?? null,
       },
     };
   } catch (error) {

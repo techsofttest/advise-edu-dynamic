@@ -33,6 +33,7 @@ interface BtechApiResponse {
       heading1: string;
       heading2: string;
       description: string;
+      image: string;
     };
   };
 }
@@ -103,7 +104,9 @@ export default async function BTechPage() {
         badge={bannerTag}
         title={`${bannerHeading1} ${bannerHeading2}`.trim()}
         description={bannerDescription}
-        bgImage="/banner/Collaborative Robotics Lab Workshop.png"
+        bgImage={
+          banner?.image || "/banner/Collaborative Robotics Lab Workshop.png"
+        }
       />
 
       {/* 02. Eligibility Check Form */}

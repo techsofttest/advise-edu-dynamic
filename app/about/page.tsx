@@ -27,6 +27,7 @@ interface AboutApiResponse {
       heading1?: string | null;
       heading2?: string | null;
       heading3?: string | null;
+      image?: string | null;
     };
   };
 }
@@ -103,6 +104,9 @@ export default async function AboutPage() {
       <PageHero
         badge={badge}
         title={`${heading1} ${heading2} ${heading3}`.trim()}
+        bgImage={
+          banner?.image || "/banner/Curly-Haired Artist in a Sunlit Studio.png"
+        }
       />
 
       {/* Modular Section 1: Who We Are & Team Background */}

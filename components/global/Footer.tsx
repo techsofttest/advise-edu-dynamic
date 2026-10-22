@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { attestations } from "@/lib/data";
+import { getPages } from "@/lib/page";
 import { getContact, type ContactData } from "@/lib/contact";
 
 export function Footer() {
@@ -16,19 +16,85 @@ export function Footer() {
     opening_hours: "",
   });
 
+  const [services, setServices] = useState<string[]>([]);
+  const [branches, setBranches] = useState<string[]>([]);
+
   // Fetch contact information from the Laravel API
   useEffect(() => {
     let active = true;
 
     async function loadContact() {
-      const data = await getContact();
+      try {
+        const data = await getContact();
 
-      if (active) {
-        setContact(data);
+        if (active) {
+          setContact(data);
+        }
+      } catch (error) {
+        console.error("Failed to load contact information:", error);
       }
     }
 
     loadContact();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Fetch Services dynamically from the Laravel Page API
+  useEffect(() => {
+    let active = true;
+
+    async function loadServices() {
+      try {
+        const pages = await getPages();
+        const serviceItems =
+          pages.embassy_document_services?.content2?.services;
+
+        if (active && Array.isArray(serviceItems)) {
+          setServices(
+            serviceItems.filter(
+              (item): item is string =>
+                typeof item === "string" && item.trim().length > 0,
+            ),
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load footer services:", error);
+      }
+    }
+
+    loadServices();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Fetch B.Tech branches dynamically from the Laravel Page API
+  useEffect(() => {
+    let active = true;
+
+    async function loadBranches() {
+      try {
+        const pages = await getPages();
+        const branchItems = pages.courses_branches?.branches;
+
+        if (active && Array.isArray(branchItems)) {
+          setBranches(
+            branchItems.filter(
+              (item): item is string =>
+                typeof item === "string" && item.trim().length > 0,
+            ),
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load B.Tech branches:", error);
+      }
+    }
+
+    loadBranches();
 
     return () => {
       active = false;
@@ -95,7 +161,7 @@ export function Footer() {
                 href="/arts"
                 className="text-sm font-medium text-white/80 hover:text-white transition-colors"
               >
-                Arts & Science
+                Arts &amp; Science
               </a>
               <a
                 href="/attestation"
@@ -118,57 +184,36 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: B.Tech Programs */}
+          {/* Column 2: Dynamic B.Tech Programs - First 5 Only */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/70">
               B.Tech Programs
             </h4>
 
             <div className="mt-4 flex flex-col gap-3">
-              <a
-                href="/btech"
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
-              >
-                Civil Engineering
-              </a>
-              <a
-                href="/btech"
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
-              >
-                Mechanical Engineering
-              </a>
-              <a
-                href="/btech"
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
-              >
-                Computer Science &amp; Eng.
-              </a>
-              <a
-                href="/btech"
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
-              >
-                Electrical &amp; Electronics
-              </a>
-              <a
-                href="/btech"
-                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
-              >
-                Automobile Engineering
-              </a>
+              {branches.slice(0, 5).map((item, index) => (
+                <a
+                  href="/btech"
+                  key={`${item}-${index}`}
+                  className="text-sm font-medium text-white/80 hover:text-white transition-colors"
+                >
+                  {item}
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Column 3: Services */}
+          {/* Column 3: Dynamic Services */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/70">
               Services
             </h4>
 
             <div className="mt-4 flex flex-col gap-3">
-              {attestations.map((item) => (
+              {services.map((item, index) => (
                 <a
                   href="/attestation"
-                  key={item}
+                  key={`${item}-${index}`}
                   className="text-sm font-medium text-white/80 hover:text-white transition-colors"
                 >
                   {item}
@@ -184,7 +229,6 @@ export function Footer() {
             </h4>
 
             <div className="mt-4 flex flex-col gap-3.5 text-sm text-white/80 font-medium">
-              {/* Dynamic Address */}
               {contact.address && (
                 <div className="flex items-start gap-3">
                   <MapPin className="h-5 w-5 text-white/70 shrink-0 mt-0.5" />
@@ -192,7 +236,6 @@ export function Footer() {
                 </div>
               )}
 
-              {/* Dynamic Phone */}
               {contact.phone && (
                 <a
                   href={`tel:${phoneLink}`}
@@ -203,7 +246,6 @@ export function Footer() {
                 </a>
               )}
 
-              {/* Dynamic Email */}
               {contact.email && (
                 <a
                   href={`mailto:${contact.email}`}
@@ -214,7 +256,6 @@ export function Footer() {
                 </a>
               )}
 
-              {/* Dynamic Opening Hours */}
               {contact.opening_hours && (
                 <div className="flex items-start gap-3 text-xs text-white/70 pt-1">
                   <Clock className="h-4 w-4 text-white/70 shrink-0 mt-0.5" />

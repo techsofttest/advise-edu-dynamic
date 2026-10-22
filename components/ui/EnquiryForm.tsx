@@ -15,11 +15,29 @@ export interface EnquiryFormProps {
   compact?: boolean;
 }
 
+interface EnquiryFormData {
+  full_name: string;
+  phone: string;
+  email: string;
+  course: string;
+  branch: string;
+  course_completion_year: string;
+  previous_university_name: string;
+}
+
 interface FloatingInputProps {
   label: string;
   type?: string;
   required?: boolean;
-  name?: string;
+  name: string;
+  value: string;
+  onChange: (name: string, value: string) => void;
+}
+
+interface ApiResponse {
+  success?: boolean;
+  message?: string;
+  errors?: Record<string, string[]>;
 }
 
 function FloatingInput({
@@ -27,10 +45,11 @@ function FloatingInput({
   type = "text",
   required = false,
   name,
+  value,
+  onChange,
 }: FloatingInputProps) {
-  const [value, setValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const id = label.toLowerCase().replace(/[^a-z0-9]/g, "-");
+  const id = `enquiry-${name.replace(/[^a-zA-Z0-9]/g, "-")}`;
 
   const isFloating = isFocused || value.length > 0;
 
@@ -38,11 +57,11 @@ function FloatingInput({
     <div className="relative">
       <input
         id={id}
-        name={name || id}
+        name={name}
         type={type}
         required={required}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => onChange(name, e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         className={`h-12 w-full rounded-lg border bg-white px-3.5 pt-4 pb-1 text-sm font-medium text-neutral-900 outline-none transition-all duration-200 ${
@@ -51,6 +70,7 @@ function FloatingInput({
             : "border-neutral-300 hover:border-neutral-400"
         }`}
       />
+
       <label
         htmlFor={id}
         className={`pointer-events-none absolute left-3.5 transition-all duration-200 ease-in-out ${
@@ -74,38 +94,59 @@ export function EnquiryForm({
   compact = false,
 }: EnquiryFormProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [formData, setFormData] = useState<EnquiryFormData>({
+    full_name: "",
+    phone: "",
+    email: "",
+    course: "",
+    branch: "",
+    course_completion_year: "",
+    previous_university_name: "",
+  });
+
+  const handleInputChange = (name: string, value: string) => {
+    setFormData((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+
+    setErrorMessage("");
+  };
 
   const formStyles = {
     orange: {
-      bg: COLORS.accent, // #F6921E
+      bg: COLORS.accent,
       text: "text-white",
       subtext: "text-white/90",
       buttonClass:
         "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
     },
     blue: {
-      bg: COLORS.primary, // #1B75BB
+      bg: COLORS.primary,
       text: "text-white",
       subtext: "text-white/90",
       buttonClass:
         "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
     },
     green: {
-      bg: COLORS.secondary, // #26A9E0
+      bg: COLORS.secondary,
       text: "text-white",
       subtext: "text-white/90",
       buttonClass:
         "bg-neutral-950 hover:bg-neutral-900 !text-white border-neutral-950",
     },
     darkBlue: {
-      bg: COLORS.primaryDark, // #125488
+      bg: COLORS.primaryDark,
       text: "text-white",
       subtext: "text-white/90",
       buttonClass:
         "bg-[#FAAF40] hover:bg-[#e59e31] !text-neutral-950 font-black border-[#FAAF40]",
     },
     gold: {
-      bg: COLORS.accentLight, // #FAAF40
+      bg: COLORS.accentLight,
       text: "text-neutral-950",
       subtext: "text-neutral-800",
       buttonClass:
@@ -115,12 +156,59 @@ export function EnquiryForm({
 
   const current = formStyles[variant];
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/enquiries`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      const result: ApiResponse = await response.json();
+
+      if (!response.ok || result.success === false) {
+        const firstValidationError = result.errors
+          ? Object.values(result.errors).flat()[0]
+          : undefined;
+
+        throw new Error(
+          firstValidationError ||
+            result.message ||
+            "Unable to submit your enquiry. Please try again.",
+        );
+      }
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Enquiry submission failed:", error);
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div
       className={`w-full rounded-2xl p-6 sm:p-8 font-body ${current.text}`}
-      style={{
-        backgroundColor: current.bg,
-      }}
+      style={{ backgroundColor: current.bg }}
     >
       <div className="mb-6">
         <h3
@@ -139,7 +227,7 @@ export function EnquiryForm({
       </div>
 
       {submitted ? (
-        <div className="bg-white rounded-xl p-8 text-center shadow-sm">
+        <div className="rounded-xl bg-white p-8 text-center shadow-sm">
           <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-[#26A9E0]" />
 
           <p className="text-base font-bold text-neutral-900">
@@ -147,68 +235,103 @@ export function EnquiryForm({
           </p>
         </div>
       ) : (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSubmitted(true);
-          }}
-          className="space-y-4"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Row 1: Name & Phone Number */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FloatingInput label="Full Name" required />
-            <FloatingInput label="Mobile Number" type="tel" required />
+            <FloatingInput
+              label="Full Name"
+              name="full_name"
+              value={formData.full_name}
+              onChange={handleInputChange}
+              required
+            />
+
+            <FloatingInput
+              label="Mobile Number"
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
           {/* Row 2: Email & Course */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FloatingInput label="Email Address" type="email" />
+            <FloatingInput
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
 
-            <div className="relative">
-              <select
-                name="course"
-                id="course"
-                required
-                defaultValue=""
-                className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-3 text-gray-700 outline-none transition focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select Your Course
-                </option>
-                <option value="btech">B.Tech</option>
-                <option value="ba">B.A.</option>
-                <option value="bcom">B.Com.</option>
-                <option value="bsc">B.Sc.</option>
-                <option value="bba">BBA</option>
-                <option value="bca">BCA</option>
-                <option value="mba">MBA</option>
-                <option value="mca">MCA</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+            <FloatingInput
+              label="Course"
+              name="course"
+              value={formData.course}
+              onChange={handleInputChange}
+            />
           </div>
 
           {/* Row 3: Branch & Completion Year */}
           {!compact ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <FloatingInput label="Branch" />
-              <FloatingInput label="Course Completion Year" />
+              <FloatingInput
+                label="Branch"
+                name="branch"
+                value={formData.branch}
+                onChange={handleInputChange}
+              />
+
+              <FloatingInput
+                label="Course Completion Year"
+                name="course_completion_year"
+                value={formData.course_completion_year}
+                onChange={handleInputChange}
+              />
             </div>
           ) : (
-            <FloatingInput label="Branch" />
+            <FloatingInput
+              label="Branch"
+              name="branch"
+              value={formData.branch}
+              onChange={handleInputChange}
+            />
           )}
 
           {/* Row 4: Previous University Name */}
-          {!compact && <FloatingInput label="Previous University Name" />}
+          {!compact && (
+            <FloatingInput
+              label="Previous University Name"
+              name="previous_university_name"
+              value={formData.previous_university_name}
+              onChange={handleInputChange}
+            />
+          )}
 
+          {/* API Error Message */}
+          {errorMessage && (
+            <div
+              role="alert"
+              className="rounded-lg border border-red-200 bg-white p-3 text-sm font-medium text-red-600"
+            >
+              {errorMessage}
+            </div>
+          )}
+
+          {/* Submit Button */}
           <div className="pt-2">
             <Button
               type="submit"
               fullWidth
               size="lg"
-              className={`font-extrabold ${current.buttonClass}`}
+              disabled={loading}
+              className={`font-extrabold ${current.buttonClass} ${
+                loading ? "cursor-not-allowed opacity-70" : ""
+              }`}
             >
-              {buttonText}
+              {loading ? "SUBMITTING..." : buttonText}
             </Button>
           </div>
         </form>

@@ -30,6 +30,7 @@ interface AttestationApiResponse {
       heading1?: string | null;
       heading2?: string | null;
       description?: string | null;
+      image?: string | null;
     };
   };
 }
@@ -120,7 +121,9 @@ export default async function AttestationPage() {
         badge={bannerTag}
         title={`${heading1} ${heading2}`.trim()}
         description={bannerDescription}
-        bgImage="/banner/Hopeful Journey Through the Airport.png"
+        bgImage={
+          banner?.image || "/banner/Hopeful Journey Through the Airport.png"
+        }
       />
 
       {/* 02. Quick Document Assessment / Eligibility Form */}

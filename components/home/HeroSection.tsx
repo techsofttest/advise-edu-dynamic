@@ -8,6 +8,7 @@ interface HeroSectionProps {
     heading2: string;
     subtitle: string;
     description: string;
+    image: string | null;
   };
 }
 
@@ -18,15 +19,11 @@ export function HeroSection({ banner }: HeroSectionProps) {
       className="relative w-full lg:h-screen pt-20 overflow-hidden bg-neutral-900 text-white"
     >
       {/* Background Image */}
-      <Image
-        src="/home-hero/h7.png"
+      <img
+        src={banner.image || "/home-hero/h7.png"}
         alt="Academic Guidance Hero"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
-
       {/* Gradient Overlay for Text Contrast */}
       <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-950/40 to-transparent" />
 

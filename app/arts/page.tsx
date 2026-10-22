@@ -33,6 +33,7 @@ interface ArtsScienceApiResponse {
       heading1?: string | null;
       heading2?: string | null;
       description?: string | null;
+      image?: string | null;
     };
   };
 }
@@ -121,7 +122,9 @@ export default async function ArtsSciencePage() {
         badge={bannerTag}
         title={`${heading1} ${heading2}`.trim()}
         description={bannerDescription}
-        bgImage="/banner/Smiling Student on a Sunlit Campus.png"
+        bgImage={
+          banner?.image || "/banner/Smiling Student on a Sunlit Campus.png"
+        }
       />
 
       {/* 02. Eligibility Check Form */}
