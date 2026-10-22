@@ -14,6 +14,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
+import { getContact } from "@/lib/contact";
 
 interface AttestationApiResponse {
   status: boolean;
@@ -46,7 +47,7 @@ async function getAttestationData(): Promise<
   }
 
   try {
-    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/attestation`, {
+    const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/attestation`, {
       cache: "no-store",
     });
 
@@ -94,9 +95,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AttestationPage() {
-  const [apiData, pages] = await Promise.all([
+  const [apiData, pages, contact] = await Promise.all([
     getAttestationData(),
     getPages(),
+    getContact(),
   ]);
 
   const banner = apiData?.banner;
@@ -180,7 +182,7 @@ export default async function AttestationPage() {
       <FAQSection />
 
       {/* 11. Final Contact & Office Info */}
-      <FinalContactSection />
+      <FinalContactSection contact={contact} />
 
       <Footer />
     </main>

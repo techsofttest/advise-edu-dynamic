@@ -17,6 +17,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
+import { getContact } from "@/lib/contact";
 
 interface ArtsScienceApiResponse {
   status: boolean;
@@ -49,7 +50,7 @@ async function getArtsScienceData(): Promise<
   }
 
   try {
-    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/arts-science`, {
+    const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/arts-science`, {
       cache: "no-store",
     });
 
@@ -95,9 +96,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ArtsSciencePage() {
-  const [apiData, pages] = await Promise.all([
+  const [apiData, pages, contact] = await Promise.all([
     getArtsScienceData(),
     getPages(),
+    getContact(),
   ]);
 
   const banner = apiData?.banner;
@@ -190,7 +192,7 @@ export default async function ArtsSciencePage() {
       <FAQSection />
 
       {/* 14. Final Contact & Office Info */}
-      <FinalContactSection />
+      <FinalContactSection contact={contact} />
 
       <Footer />
     </main>

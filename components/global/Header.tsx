@@ -18,6 +18,7 @@ export function Header() {
     phone: "",
     email: "",
     opening_hours: "",
+    map_link: "",
   });
 
   // Fetch contact information from the API

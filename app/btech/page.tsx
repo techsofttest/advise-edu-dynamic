@@ -16,6 +16,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
+import { getContact } from "@/lib/contact";
 import type { Metadata } from "next";
 
 interface BtechApiResponse {
@@ -48,7 +49,7 @@ async function getBtechData(): Promise<BtechApiResponse["data"] | null> {
       return null;
     }
 
-    const response = await fetch(`${apiUrl.replace(/\/$/, "")}/btech`, {
+    const response = await fetch(`${apiUrl.replace(/\/+$/, "")}/btech`, {
       cache: "no-store",
     });
 
@@ -82,7 +83,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BTechPage() {
-  const [pages, btechData] = await Promise.all([getPages(), getBtechData()]);
+  const [pages, btechData, contact] = await Promise.all([
+    getPages(),
+    getBtechData(),
+    getContact(),
+  ]);
 
   const engineeringAdmissions = pages.engineering_admissions?.content1;
 
@@ -174,7 +179,7 @@ export default async function BTechPage() {
       <FAQSection />
 
       {/* 15. Final Contact & Office Info */}
-      <FinalContactSection />
+      <FinalContactSection contact={contact} />
 
       <Footer />
     </main>
