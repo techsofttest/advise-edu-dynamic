@@ -111,7 +111,12 @@ export function UniversityReputationSection() {
               {description}
             </p>
 
-            <Button href="#contact" variant="blue" size="md" className="mt-7">
+            <Button
+              href="#talk-with-counsellor"
+              variant="blue"
+              size="md"
+              className="mt-7"
+            >
               Speak with an advisor
               <ArrowRight size={16} />
             </Button>

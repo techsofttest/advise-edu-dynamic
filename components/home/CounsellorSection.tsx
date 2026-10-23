@@ -50,7 +50,7 @@ export function CounsellorSection() {
   }
 
   return (
-    <section className="relative z-20 bg-[#1B75BB]">
+    <section id="talk-with-counsellor" className="relative z-20 bg-[#1B75BB]">
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-10 px-6 py-8 sm:px-12 md:px-16 lg:grid-cols-[1fr_580px] lg:px-24 lg:py-12">
         <ScrollReveal>
           <div className="text-white">
