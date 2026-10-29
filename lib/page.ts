@@ -187,6 +187,15 @@ export interface GetInTouch {
   content1: TextContent;
 }
 
+// ID 19: VFS Appointments
+export interface VfsAppointments {
+  id: number;
+  title: string;
+  heading: string;
+  description: string;
+  countries: string[];
+}
+
 // Complete API response data
 export interface PageData {
   take_the_first_step: TakeTheFirstStep;
@@ -207,6 +216,7 @@ export interface PageData {
   who_we_are: WhoWeAre;
   our_foundation: OurFoundation;
   get_in_touch: GetInTouch;
+  vfs_appointments: VfsAppointments;
 }
 
 export interface PageApiResponse {
@@ -361,6 +371,14 @@ const emptyPageData: PageData = {
   get_in_touch: {
     id: 0,
     content1: {},
+  },
+
+  vfs_appointments: {
+    id: 0,
+    title: "",
+    heading: "",
+    description: "",
+    countries: [],
   },
 };
 

@@ -20,6 +20,9 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { MoreDetailsSection } from "@/components/home/MoreDetailsSection";
 import { GallerySection } from "@/components/home/GallerySection";
 import { FAQSection } from "@/components/home/FAQSection";
+
+import { VFSAppointmentSection } from "@/components/home/VFSAppointmentSection";
+
 // import { FinalContactSection } from "@/components/home/FinalContactSection";
 import { getPages } from "@/lib/page";
 
@@ -178,20 +181,19 @@ export default async function HomePage() {
         buttonText="SUBMIT"
         sectionBg="bg-white"
       />
-
+      {/* 10. Accreditation */}
       <AccreditationSection />
-      {/* 16. Attestation Full Width Image Banner */}
 
-      {/* 10. Arts & Science Full Width Image Banner */}
+      {/* 11. Arts & Science Full Width Image Banner */}
       <FullWidthBanner
         imageSrc="/service-banner/Academic Programs on Campus.png"
         alt="Arts, Science & Commerce Academic Programs"
         buttonHref="/arts"
       />
-      {/* 11. Arts & Science Courses */}
+      {/* 12. Arts & Science Courses */}
       <ArtsScienceSection />
 
-      {/* 12. Form 4: Personal Counselling */}
+      {/* 13. Form 4: Personal Counselling */}
       {(() => {
         const guidance = pages.personalised_guidance;
 
@@ -214,29 +216,30 @@ export default async function HomePage() {
           />
         );
       })()}
-
-      {/* 13. Educational & Awareness Videos */}
+      {/* 14. VFS Appointment */}
+      <VFSAppointmentSection />
+      {/* 15. Educational & Awareness Videos */}
       <AwarenessVideosSection />
-      {/* 14. Affiliation & Academic Pathways */}
+      {/* 16. Affiliation & Academic Pathways */}
       <AffiliationSection />
-      {/* 15. Recognitions & Accreditation */}
-
+      {/* 17. Recognitions & Accreditation */}
       <FullWidthBanner
         imageSrc="/service-banner/Global Embassy Services Banner.png"
         alt="Global Embassy & Apostille Attestation Services"
         buttonHref="/attestation"
       />
-      {/* 17. Embassy & Document Attestation */}
+      {/* 18. Embassy & Document Attestation */}
       <AttestationSection />
-      {/* 18. Student Reviews & Testimonials */}
+      {/* 19. Student Reviews & Testimonials */}
+
       <TestimonialsSection />
-      {/* 19. More Information Request */}
+      {/* 20. More Information Request */}
       <MoreDetailsSection />
-      {/* 20. Campus & Environment Gallery */}
+      {/* 21. Campus & Environment Gallery */}
       <GallerySection />
-      {/* 21. Frequently Asked Questions */}
+      {/* 22. Frequently Asked Questions */}
       <FAQSection />
-      {/* 22. Final Contact & Office Info */}
+      {/* 23. Final Contact & Office Info */}
       {/* <FinalContactSection /> */}
       <Footer />
     </main>
